@@ -48,8 +48,13 @@ var jenkinsCmd = &cobra.Command{
 			return err
 		}
 		logger.Info("jenkins init success")
+		job, err := jenkins.GetJob(ctx, jenkinsJobName)
+		if err != nil {
+			return err
+		}
+		logger.Info("jenkins job get success: %+v", job)
 		params := StringToMap(jenkinsJobParams, ",")
-		queueid, err := jenkins.BuildJob(ctx, jenkinsJobName, params)
+		queueid, err := job.InvokeSimple(ctx, params)
 		if err != nil {
 			return err
 		}

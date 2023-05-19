@@ -17,10 +17,13 @@ limitations under the License.
 package cmd
 
 import (
+	"github.com/cuisongliu/logger"
 	"os"
 
 	"github.com/spf13/cobra"
 )
+
+var debug bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -45,7 +48,10 @@ func init() {
 	// will be global for your application.
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gitlab-hooks.yaml)")
-
+	cobra.OnInitialize(func() {
+		logger.Cfg(debug, false)
+	})
+	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "enable debug logger")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
